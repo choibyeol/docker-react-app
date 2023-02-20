@@ -1,0 +1,17 @@
+sudo: required # 관리자 권한
+
+language: generic # 언어(플랫폼) 선택
+
+services: # 도커 환경 구성
+  - docker
+
+before_install: # 스크립트를 실행할 수 있는 환경 구성
+  - echo "Start creating an image with dockerfile"
+  - docker build -t choibyeol/docker-react-app -f Dockerfile.dev .
+
+script: # 실행할 스크립트(테스트 실행)
+  - docker run -e CI=true choibyeol/docker-react-app npm run test -- --coverage
+    # CI=true 없으면 오류
+
+after_success: # 테스트 성공 후 할일
+  - echo "Test success"
